@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  name String
+  password String // hash this with bcrypt
+  role Role @default(STUDENT)
+  createdAt DateTime @default(now())
+  
+  enrollments Enrollment[]
+  progress Progress[]
+}
+
+model Course {
+  id String @id @default(cuid())
+  title String
+  description String
+  instructor String
+  thumbnail String?
+  createdAt DateTime @default(now())
+  
+  lessons Lesson[]
+  enrollments Enrollment[]
+}
+
+model Lesson {
+  id String @id @default(cuid())
+  title String
+  content String // markdown or video url
+  order Int
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  progress Progress[]
+}
+
+model Enrollment {
+  id String @id @default(cuid())
+  userId String
+  courseId String
+  enrolledAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, courseId])
+}
+
+model Progress {
+  id String @id @default(cuid())
+  userId String
+  lessonId String
+  completed Boolean @default(false)
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, lessonId])
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
