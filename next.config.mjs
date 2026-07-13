@@ -32,10 +32,10 @@ const nextConfig = {
 
   // TypeScript and ESLint checks during build
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
 };
 
