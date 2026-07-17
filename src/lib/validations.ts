@@ -24,23 +24,9 @@ export const createCourseSchema = z.object({
   thumbnail: z.string().url("Must be a valid URL").optional().or(z.literal("")),
 })
 
-// 3. Lesson Schemas
+// 3. Lesson Schemas (lesson-actions.ts के लिए आवश्यक)
 export const createLessonSchema = z.object({
-  title: z.string().min(3, "Lesson title required"),
-  content: z.string().min(10, "Content cannot be empty"),
-  order: z.coerce.number().int().min(1, "Order must be at least 1"),
-  courseId: z.string().cuid(),
+  title: z.string().min(3, "Title must be at least 3 characters").max(100),
+  content: z.string().min(5, "Content description or URL is required"),
+  courseId: z.string().min(1, "Course ID is required"),
 })
-
-// 4. Quiz Schemas
-export const createQuizSchema = z.object({
-  question: z.string().min(5, "Question too short"),
-  options: z.array(z.string().min(1, "Option cannot be empty")).min(2, "Need at least 2 options"),
-  correctAnswer: z.number().int().min(0),
-})
-
-// Types for TypeScript
-export type LoginInput = z.infer<typeof loginSchema>
-export type SignupInput = z.infer<typeof signupSchema>
-export type CreateCourseInput = z.infer<typeof createCourseSchema>
-export type CreateLessonInput = z.infer<typeof createLessonSchema>
