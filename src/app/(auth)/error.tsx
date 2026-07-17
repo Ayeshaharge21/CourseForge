@@ -1,24 +1,35 @@
-'use client'
+"use client";
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button"; // यदि बटन कंपोनेंट उपलब्ध है, अन्यथा आप पुराना बटन यूज़ कर सकते हैं
+
+interface ErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+export default function AuthError({ error, reset }: ErrorProps) {
+  useEffect(() => {
+    // एरर को लॉगिंग सर्विस (जैसे Sentry) में भेजने के लिए
+    console.error("[AUTH_ROUTE_ERROR]:", error);
+  }, [error]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="text-center p-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong!</h2>
-        <p className="text-gray-600 mb-6">{error.message}</p>
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+      <div className="text-center p-8 bg-white rounded-xl shadow-md max-w-md w-full border border-slate-100">
+        <h2 className="text-2xl font-bold text-rose-600 mb-2">
+          Something went wrong!
+        </h2>
+        <p className="text-sm text-slate-500 mb-6 bg-slate-50 p-3 rounded font-mono break-all">
+          {error.message || "An unexpected authentication error occurred."}
+        </p>
         <button
           onClick={() => reset()}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          className="px-5 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
         >
           Try again
         </button>
       </div>
     </div>
-  )
+  );
 }
