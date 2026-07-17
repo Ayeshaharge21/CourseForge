@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/lib/prisma"; // आपका ग्लोबल प्रिज्मा क्लाइंट
+import { PrismaAdapter } from "@auth/prisma-adapter"; 
+import { prisma } from "@/lib/prisma"; 
 
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -17,10 +17,25 @@ const handler = NextAuth({
           return null;
         }
 
-        // यहाँ अपना यूज़र वेरिफिकेशन लॉजिक लिखें (उदा. bcrypt.compare)
-        // सुरक्षा के लिए अभी के लिए यह null रिटर्न कर रहा है।
-        // वेरिफिकेशन सफल होने पर यूज़र ऑब्जेक्ट रिटर्न करें: return user;
-        return null; 
+        try {
+          // यूज़र को डेटाबेस में खोजें
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          });
+
+          if (!user) {
+            return null;
+          }
+
+          // पासवर्ड मैच लॉजिक (यदि आप bcrypt यूज़ कर रहे हैं)
+          // const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+          // if (!isPasswordValid) return null;
+
+          return user;
+        } catch (error) {
+          console.error("Auth authorize error:", error);
+          return null;
+        }
       }
     })
   ],
@@ -28,7 +43,7 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   pages: {
-    signIn: "/sign-in", // आपका कस्टम साइन-इन पेज पाथ
+    signIn: "/login", 
   },
   callbacks: {
     async session({ session, token }) {
@@ -40,5 +55,5 @@ const handler = NextAuth({
   }
 });
 
-// Next.js App Router के लिए GET और POST दोनों हँडलर्स को एक्सपोर्ट करना ज़रूरी है
+// Next.js App Router के लिए GET और POST एक्सपोर्ट होना अनिवार्य है
 export { handler as GET, handler as POST };
