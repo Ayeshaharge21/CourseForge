@@ -8,66 +8,69 @@ datasource db {
 }
 
 model User {
-  id String @id @default(cuid())
-  email String @unique
-  name String
-  password String // hash this with bcrypt
-  role Role @default(STUDENT)
-  createdAt DateTime @default(now())
-  
+  id          String       @id @default(cuid())
+  email       String       @unique
+  name        String
+  password    String       // hash this with bcrypt
+  role        Role         @default(STUDENT)
+  createdAt   DateTime     @default(now())
   enrollments Enrollment[]
-  progress Progress[]
-}
-
-model Course {
-  id String @id @default(cuid())
-  title String
-  description String
-  instructor String
-  thumbnail String?
-  createdAt DateTime @default(now())
-  
-  lessons Lesson[]
-  enrollments Enrollment[]
-}
-
-model Lesson {
-  id String @id @default(cuid())
-  title String
-  content String // markdown or video url
-  order Int
-  courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  
-  progress Progress[]
-}
-
-model Enrollment {
-  id String @id @default(cuid())
-  userId String
-  courseId String
-  enrolledAt DateTime @default(now())
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, courseId])
-}
-
-model Progress {
-  id String @id @default(cuid())
-  userId String
-  lessonId String
-  completed Boolean @default(false)
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, lessonId])
+  progress    Progress[]
 }
 
 enum Role {
   STUDENT
   INSTRUCTOR
   ADMIN
+}
+
+model Course {
+  id           String       @id @default(cuid())
+  title        String
+  description  String
+  instructorId String
+  price        Float?       @default(0)
+  thumbnail    String?
+  createdAt    DateTime     @default(now())
+  lessons      Lesson[]
+  enrollments  Enrollment[]
+}
+
+model Lesson {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   // Markdown context or YouTube video URL
+  order     Int      @default(0)
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress  Progress[]
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  isCompleted Boolean @default(false)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  amount    Float
+  status    String   // SUCCESS, PENDING, FAILED
+  createdAt DateTime @default(now())
 }
