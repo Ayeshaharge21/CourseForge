@@ -1,39 +1,35 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable Server Actions - already default in Next 14, but explicit is good
+  // Enable Server Actions (Next 14 में डिफॉल्ट है, पर स्पष्ट रखना अच्छा है)
   experimental: {
     serverActions: {
-      bodySizeLimit: '2mb', // For future: lesson content uploads
+      bodySizeLimit: '2mb', // फ्यूचर लेसन कंटेंट अपलोड्स के लिए
     },
   },
 
-  // Allow external images for course thumbnails, avatars, etc
+  // बाहरी इमेजेस (Thumbnails, Avatars) को अलाउ करने के लिए
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: '://unsplash.com',
       },
       {
         protocol: 'https',
-        hostname: 'cdn.courseforge.com', // For future S3/Cloudflare R2
+        hostname: '://courseforge.com',
       },
       {
         protocol: 'https',
-        hostname: 'avatar.vercel.sh', // For default avatars
+        hostname: 'avatar.vercel.sh',
       },
     ],
   },
 
-  // Optional: Redirect / to /dashboard if logged in later
-  // async redirects() {
-  //   return []
-  // }
-
-  // TypeScript and ESLint checks during build
+  // बिल्ड के समय TypeScript एरर्स को अस्थायी रूप से अनदेखा करने के लिए (अगर बिल्ड ब्लॉक हो रहा हो)
   typescript: {
     ignoreBuildErrors: true,
   },
+  // बिल्ड के समय ESLint वार्निंग्स को अनदेखा करने के लिए
   eslint: {
     ignoreDuringBuilds: true,
   },
