@@ -1,132 +1,79 @@
-"use client";
+import { db } from "@/lib/db" // या अगर आपकी फ़ाइल में prisma है तो: import { prisma as db } from "@/lib/prisma"
+import { auth } from "@clerk/nextjs/server" // या अपना कस्टम ऑथ इम्पोर्ट करें
+import { redirect } from "next/navigation"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Save, ArrowLeft, Upload } from "lucide-react";
-import Link from "next/link";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
+// हम इसके यूज़र इंटरफ़ेस (UI) फॉर्म्स को संभालने के लिए नीचे एक क्लाइंट कंपोनेंट का रेफरेंस लेंगे 
+// या फिर आप डायरेक्ट सर्वर एक्शन्स (Server Actions) यूज़ कर सकते हैं।
+import { CourseEditForm } from "./_components/course-edit-form" 
 
-async function getCourseById(id: string, instructorId: string) {
-  const course = await prisma.course.findUnique({
-    where: { id, instructorId },
-    include: {
-      lessons: true,
-      _count: { select: { enrollments: true }
-    }
-  });
-  return course;
+interface CoursePageProps {
+  params: Promise<{
+    id: string
+  }>
 }
 
-export default async function CourseDetailPage({ 
-  params 
-}: { 
-  params: { id: string } 
-}) {
-  const session = await auth();
-  if (!session?.user?.id) return <div>Please login</div>;
-
-  const course = await getCourseById(params.id, session.user.id);
+export default async function CourseIdPage({ params }: CoursePageProps) {
+  // Next.js 15+ के नियमों के मुताबिक params को await करना ज़रूरी है
+  const { id } = await params
   
-  if (!course) return <div>Course not found</div>;
+  const { userId } = await auth()
+  if (!userId) {
+    return redirect("/")
+  }
+
+  // सर्वर साइड पर सुरक्षित डेटाबेस क्वेरी
+  const course = await db.course.findUnique({
+    where: {
+      id: id,
+      instructorId: userId, // सुनिश्चित करें कि सिर्फ वही इंस्ट्रक्टर इसे देख पाए
+    },
+    include: {
+      lessons: {
+        orderBy: {
+          position: "asc",
+        },
+      },
+    },
+  })
+
+  if (!course) {
+    return redirect("/instructor/courses")
+  }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4">
-        <Link href="/dashboard/instructor/courses">
-          <Button variant="outline" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <h1 className="text-3xl font-bold">Edit Course</h1>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Form */}
-        <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Course Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">Course Title</Label>
-                <Input id="title" defaultValue={course.title} />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea 
-                  id="description" 
-                  defaultValue={course.description || ""} 
-                  rows={5}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Thumbnail</Label>
-                <Button variant="outline">
-                  <Upload className="mr-2 h-4 w-4" />
-                  Upload Image
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Lessons ({course.lessons.length})</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {course.lessons.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No lessons yet</p>
-              ) : (
-                <div className="space-y-2">
-                  {course.lessons.map((lesson) => (
-                    <div key={lesson.id} className="p-3 border rounded-md">
-                      {lesson.title}
-                    </div>
-                  ))}
-                </div>
-              )}
-              <Button className="mt-4" variant="outline">+ Add Lesson</Button>
-            </CardContent>
-          </Card>
+    <div className="p-6">
+      <div className="flex items-center justify-between">
+        <div className="w-full">
+          <Link
+            href="/instructor/courses"
+            className="flex items-center text-sm hover:opacity-75 transition mb-6"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to courses
+          </Link>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-y-2">
+              <h1 className="text-2xl font-medium">Course setup</h1>
+              <span className="text-sm text-slate-500">
+                Customize your course details and modules
+              </span>
+            </div>
+          </div>
         </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Course Stats</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span>Students:</span>
-                <span className="font-bold">{course._count.enrollments}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Price:</span>
-                <span className="font-bold">₹{course.price}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Status:</span>
-                <span className="font-bold">{course.published ? "Published" : "Draft"}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Button className="w-full">
-            <Save className="mr-2 h-4 w-4" />
-            Save Changes
-          </Button>
+      </div>
+      
+      {/* यहाँ आपका सारा फ़ॉर्म का स्टेट और UI लॉजिक जाएगा जो हम क्लाइंट कंपोनेंट में पास करेंगे */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        <div>
+          <div className="flex items-center gap-x-2">
+            <h2 className="text-xl">Customize your course</h2>
+          </div>
+          {/* क्लाइंट साइड इंटरैक्शन के लिए अलग फॉर्म कंपोनेंट */}
+          <CourseEditForm initialData={course} courseId={course.id} />
         </div>
       </div>
     </div>
-  );
+  )
 }
