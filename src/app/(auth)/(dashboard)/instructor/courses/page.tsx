@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../../../../components/ui/card";
+import { Button } from "../../../../../../components/ui/button";
 import { Plus, BookOpen, Users, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { auth } from "../../../../../../lib/auth";
+import { prisma } from "../../../../../../lib/prisma";
 import { redirect } from "next/navigation";
 
 // सुरक्षित सर्वर-साइड डेटा फ़ेचिंग फंक्शन
