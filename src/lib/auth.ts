@@ -15,9 +15,9 @@ interface UserPayload {
 // 1. Create token and set cookie on login/signup
 export async function createSession(user: UserPayload) {
   try {
-    const token = jwt.sign(user, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ ...user }, JWT_SECRET, { expiresIn: "7d" });
     
-    // Next.js 15+ के नियमानुसार cookies() को await करना ज़रूरी है
+    
     const cookieStore = await cookies();
     
     cookieStore.set(COOKIE_NAME, token, {
