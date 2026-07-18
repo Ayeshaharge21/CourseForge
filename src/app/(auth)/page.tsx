@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 import { Button } from "../../components/ui/button";
 import { BookOpen } from "lucide-react";
 import Link from "next/link";
-
+ 
 export default function AuthPage() {
   return (
     <div className="flex flex-col items-center justify-center p-4">
