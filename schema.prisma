@@ -11,7 +11,7 @@ model User {
   id          String       @id @default(cuid())
   email       String       @unique
   name        String
-  password    String       // hash this with bcrypt
+  password    String       
   role        Role         @default(STUDENT)
   createdAt   DateTime     @default(now())
   enrollments Enrollment[]
@@ -37,12 +37,12 @@ model Course {
 }
 
 model Lesson {
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
   title     String
-  content   String   // Markdown context or YouTube video URL
-  order     Int      @default(0)
+  content   String     
+  order     Int        @default(0)
   courseId  String
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
   progress  Progress[]
 }
 
@@ -58,12 +58,12 @@ model Enrollment {
 }
 
 model Progress {
-  id        String   @id @default(cuid())
-  userId    String
-  lessonId  String
-  isCompleted Boolean @default(false)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  id          String   @id @default(cuid())
+  userId      String
+  lessonId    String
+  isCompleted Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
 }
@@ -71,6 +71,6 @@ model Progress {
 model Payment {
   id        String   @id @default(cuid())
   amount    Float
-  status    String   // SUCCESS, PENDING, FAILED
+  status    String   
   createdAt DateTime @default(now())
 }
