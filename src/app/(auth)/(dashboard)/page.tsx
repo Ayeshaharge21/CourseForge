@@ -1,12 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
+import { Button } from "../../../../components/ui/button";
 import { BarChart3, Users, BookOpen, DollarSign, Plus, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { auth } from "../../../../lib/auth";
+import { prisma } from "../../../../lib/prisma";
 import { redirect } from "next/navigation";
 
-// सुरक्षित सर्वर-साइड डैशबोर्ड डेटा फ़ेचिंग फंक्शन
+
 async function getDashboardData(instructorId: string) {
   try {
     const [totalCourses, totalStudents, totalRevenueData] = await Promise.all([
@@ -48,7 +48,7 @@ async function getDashboardData(instructorId: string) {
 
 export default async function DashboardPage() {
   const session = await auth();
-  const userId = session?.user?.id; // यदि आप क्लर्क यूज़ कर रहे हैं तो: const { userId } = await auth();
+  const userId = session?.user?.id; 
 
   if (!userId) {
     return redirect("/");
@@ -105,7 +105,7 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      {/* हालिया कोर्सेस (Recent Courses) */}
+      {/* (Recent Courses) */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold tracking-tight">Recent Courses</h2>
         {data.recentCourses.length === 0 ? (
