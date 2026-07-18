@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "../../../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
 import { BookOpen, Users, BarChart3, Shield } from "lucide-react";
 import Link from "next/link";
 
@@ -33,7 +33,6 @@ const features = [
 ];
 
 export default async function CourseOverviewPage({ params }: CoursePageProps) {
-  // Next.js 15+ के नियमानुसार params को await करना ज़रूरी है
   const { id } = await params;
 
   return (
