@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3, TrendingUp, Users, DollarSign } from "lucide-react";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma"; 
+import { prisma } from "@/lib/db"; 
 import { redirect } from "next/navigation";
 
 async function getAnalyticsData(instructorId: string) {
