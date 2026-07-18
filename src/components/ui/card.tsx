@@ -1,8 +1,7 @@
-import { Card, CardContent, CardFooter, CardHeader } from "../../../components/ui/card";
-import { Badge } from "./badge";
-import { Button } from "../../../components/ui/button";
 import { Star, Users, Clock, BookOpen } from "lucide-react";
 import Image from "next/image";
+import { Badge } from "./badge"; 
+import { Button } from "./button"; 
 
 interface CourseCardProps {
   title: string;
