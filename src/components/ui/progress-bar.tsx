@@ -1,8 +1,8 @@
 "use client";
 
-import { Progress } from "@/components/ui/progress";
-import { CheckCircle2, Circle, Lock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Progress } from "./progress"; 
+import { CheckCircle2, Circle } from "lucide-react"; 
+import { cn } from "../../lib/utils"; 
 
 interface ProgressBarProps {
   value: number; // 0 to 100
