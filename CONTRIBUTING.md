@@ -10,6 +10,6 @@ Be respectful. We’re here to build and learn together.
 ## 🚀 How to Contribute
 
 ### 1. Fork & Clone
-```bash
+```bash```
 git clone https://github.com/Ayeshaharge21/courseforge.git
 cd courseforge
