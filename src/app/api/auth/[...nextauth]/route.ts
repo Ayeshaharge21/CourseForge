@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 const handler = NextAuth({
   adapter: PrismaAdapter(db),
   providers: [
-    CredentialsProvider({
+    CredentialsProvider({ 
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "email@example.com" },
