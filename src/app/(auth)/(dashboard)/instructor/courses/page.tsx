@@ -6,7 +6,7 @@ import { auth } from "../../../../../../lib/auth";
 import { prisma } from "../../../../../../lib/prisma";
 import { redirect } from "next/navigation";
 
-// सुरक्षित सर्वर-साइड डेटा फ़ेचिंग फंक्शन
+
 async function getInstructorCourses(instructorId: string) {
   try {
     const courses = await prisma.course.findMany({
@@ -27,7 +27,7 @@ async function getInstructorCourses(instructorId: string) {
 
 export default async function CoursesPage() {
   const session = await auth();
-  const userId = session?.user?.id; // यदि आप क्लर्क यूज़ कर रहे हैं तो: const { userId } = await auth();
+  const userId = session?.user?.id; // const { userId } = await auth();
 
   if (!userId) {
     return redirect("/");
