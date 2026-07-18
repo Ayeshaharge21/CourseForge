@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "./card"; 
+import { Button } from "./button";
+import { RadioGroup, RadioGroupItem } from "./radio-group";
+import { Label } from "./label"; 
+import { Progress } from "./progress"; 
 import { CheckCircle2, XCircle, RotateCcw } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils"; 
 
 interface Question {
   id: string;
