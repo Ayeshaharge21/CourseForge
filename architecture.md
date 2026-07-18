@@ -1,6 +1,6 @@
 # CourseForge Architecture
 
-## 1. Tech Stack
+## 1. Tech Stack 
 
 | Layer | Technology |
 | --- | --- |
