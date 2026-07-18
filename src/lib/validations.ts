@@ -1,4 +1,4 @@
-import { z } from "zod"
+import * as z from "zod";
 
 // 1. Auth Schemas
 export const loginSchema = z.object({
