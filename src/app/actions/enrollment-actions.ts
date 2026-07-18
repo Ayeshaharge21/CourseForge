@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma as db } from "@/lib/prisma"; // import { db } from "@/lib/db"
-import { auth } from "@/lib/auth"; ट
+import { prisma as db } from "../../../lib/prisma";
+import { auth } from "../../../lib/auth";
 import { revalidatePath } from "next/cache";
 
 // 1. ENROLL IN A COURSE
