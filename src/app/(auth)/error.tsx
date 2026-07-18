@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button"; // यदि बटन कंपोनेंट उपलब्ध है, अन्यथा आप पुराना बटन यूज़ कर सकते हैं
+import { Button } from "../../components/ui/button";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -10,7 +10,7 @@ interface ErrorProps {
 
 export default function AuthError({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // एरर को लॉगिंग सर्विस (जैसे Sentry) में भेजने के लिए
+
     console.error("[AUTH_ROUTE_ERROR]:", error);
   }, [error]);
 
