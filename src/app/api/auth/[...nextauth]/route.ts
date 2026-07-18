@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@auth/prisma-adapter"; 
-import { prisma } from "@/lib/prisma"; 
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "../../../../../lib/prisma";
 
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -18,7 +18,7 @@ const handler = NextAuth({
         }
 
         try {
-          // यूज़र को डेटाबेस में खोजें
+          
           const user = await prisma.user.findUnique({
             where: { email: credentials.email }
           });
@@ -27,7 +27,6 @@ const handler = NextAuth({
             return null;
           }
 
-          // पासवर्ड मैच लॉजिक (यदि आप bcrypt यूज़ कर रहे हैं)
           // const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
           // if (!isPasswordValid) return null;
 
@@ -55,5 +54,4 @@ const handler = NextAuth({
   }
 });
 
-// Next.js App Router के लिए GET और POST एक्सपोर्ट होना अनिवार्य है
 export { handler as GET, handler as POST };
