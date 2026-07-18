@@ -1,11 +1,11 @@
 "use server";
 
-import { prisma as db } from "@/lib/prisma"; // आपके प्रोजेक्ट के सही पाथ के अनुसार (यदि db नाम है तो: import { db } from "@/lib/db")
-import { auth } from "@/lib/auth"; // सही पाथ इम्पोर्ट
+import { prisma as db } from "../../../lib/prisma";
+import { auth } from "../../../lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-// 1. GET ALL COURSES (इंस्ट्रक्टर के सभी कोर्सेस प्राप्त करने के लिए)
+
 export async function getCourses() {
   try {
     const session = await auth();
@@ -35,7 +35,7 @@ export async function getCourses() {
   }
 }
 
-// 2. GET COURSE BY ID (किसी एक विशिष्ट कोर्स को खोजने के लिए)
+
 export async function getCourseById(courseId: string) {
   try {
     const session = await auth();
@@ -51,7 +51,7 @@ export async function getCourseById(courseId: string) {
       include: {
         lessons: {
           orderBy: {
-            order: "asc" // आपके स्कीमा के अनुसार
+            order: "asc" 
           }
         },
         _count: {
